@@ -14,7 +14,7 @@ SpringFramework => Spring + Framework
       중량프레임워크	경량프레임워크
                         (확장성-다른프레임워크의 포용)
 
- * 스프링 주요 개념/특징
+	* 스프링 주요 개념/특징
   - EJB보다 가볍고,배우기쉽다.
   - 제어의 역행 기술을 사용해서 애플리케이션간의 느슨한 결합을 제어한다 .
     (Inversion Of Control,IoC)
@@ -29,7 +29,7 @@ SpringFramework => Spring + Framework
     (Plain Old Java Object)
 
 
-  * 스프링 주요 기능
+	* 스프링 주요 기능
 Spring Core : 다른 기능과 설정을 분리하기위한 IoC기능 제공
 Spring Context : 스프링 기본기능, 애플리케이션에 있는 기능(빈-객체)을
                  접근하도록 기능을 제공    
@@ -60,6 +60,85 @@ Spring WebMVC : 스프링MVC관련 기능 제공
 https://mvnrepository.com/ 에서 받은 jar 파일 직접 넣어볼 수 있음
 
 
+	* Presentation Layer : UI를 구성하는 부분 (웹, 모바일)
+							=> html, css, js, jsp, Controller
+	
+	* Business Layer : 서비스 계층, 요구사항을 구현하는 부분
+						=> XXXAction
+	
+	* Data Access Layer : 영속 계층, 데이터 처리를 수행하는 부분
+							=> DAO
+	
+	* DataBase
+		=> Mysql, Oracle...
+		
+		
+				[		Spring Framework		]
+	요청	->	Controller	->	Service	->	DAO	->	MyBatis	->	DB
+	(request)		|
+					View
 
 
+마이바티스는 무엇인가?
+	마이바티스는 개발자가 지정한 SQL, 저장프로시저
+	그리고 몇가지 고급 매핑을 지원하는 퍼시스턴스 프레임워크이다.
+	마이바티스는 JDBC로 처리하는 상당부분의 코드와 파라미터 설정 및 결과 매핑을 대신해준다.
+	마이바티스는 데이터베이스 레코드에 원시타입과 Map 인터페이스
+	그리고 자바 POJO 를 설정해서 매핑하기 위해 XML과 애노테이션을 사용할 수 있다.
+	
+	=> 기존에 JDBC 단점을 보완하는 프레임워크
+		- try-catch-finally 생략
+		- pstmt, rs 데이터 입력 생략
+		- SQL 구문을 분리
+		- Spring과 연동이 자동
+		- 동적 SQL 지원
 
+
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+DriverManagerDataSource dataSource = new DriverManagerDataSource();
+= <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+</bean>
+
+dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+= <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+
+
+	* 의존 객체 자동 주입 : 개발자가 주입대상을 명시하지 않아도 자동으로 연결(스프링 컨테이너)
+	@Resource : Java에서 지원하는 어노테이션 (특정 프레임워크에 비종속적)
+				- 의존 객체를 찾는 순서
+				[이름] -> [타입] -> [@Qualifier] -> 실패
+				- 멤버변수, set메서드에서만 사용가능
+				
+	@Inject : Java에서 지원하는 어노테이션 (특정 프레임워크에 비종속적)
+				- 의존 객체를 찾는 순서
+				[타입] -> [@Qualifier] -> [이름] -> 실패
+				- 빌드 도구(Maven)를 사용해서 해당 라이브러리 의존성 추가(필수)
+				- 멤버변수, set메서드, 생성자, 일반메서드 사용가능
+				
+	@Autowired : Spring에서 지원하는 어노테이션 (Spring에 종속적)
+				- 의존 객체를 찾는 순서
+				[타입] -> [이름] -> [@Qualifier] -> 실패
+				- 반드시 스프링에서만 사용
+				- 멤버변수, set메서드, 생성자, 일반메서드 사용가능 
+				
+	@Qualifier : 주입하려는 대상이 여러개 있을때 해당 대상을 구분하기위한 값
+				- @Qualifier 설정한 객체가 없을경우 Exception 발생
+	
+	<bean 	id="dataSource1"
+			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<qualifier value="ds1">
+			...		
+	</bean>
+	
+	<bean 	id="dataSource2"
+			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<qualifier value="ds2">
+			...		
+	</bean>
+	
+	--------------------------------------------------------------------------------------------------
+	
+	@Autowired @Qualifier("ds2")
+	private DataSource ds;
+	
+	
