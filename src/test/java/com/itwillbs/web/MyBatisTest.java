@@ -20,10 +20,14 @@ public class MyBatisTest {
 	private SqlSessionFactory sqlFactory;
 	// => sqlSessionFactoryBean -> SqlSessionFactory 객체로 업캐스팅
 	
+	@Inject
+	private SqlSession sqlSession;
+	
 	@Test
 	public void mybatis_connectTest() {
 		System.out.println(sqlFactory);
 //		SqlSession session = sqlFactory.openSession();
 //		session.insert(statement);
+		System.out.println(sqlSession);
 	}
 }
