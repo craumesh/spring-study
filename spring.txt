@@ -221,3 +221,20 @@ dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 	- 전달받은 데이터를 뷰페이지에 출력
 	
 	
+	
+	@RequestParam : 주소줄에 있는 있는 이름(Key)을 가진 데이터 값(Value)를 가져오는 동작 (1:1)
+	
+	@ModelAttribute : 주소줄에 있는 이름(Key)을 가진 데이터 값(Value, Bean, Collection)을 가져오는 동작 (1:N)
+						=> Model 객체에 담아서 정보를 뷰페이지로 전달
+	
+	Model : view페이지로 정보를 전달하는 객체, 데이터를 이름과 값(Value, Bean, Collection)을 저장 (1:N)
+	
+	* 	Model.addAttribute() 		vs 		@ModelAttribute
+		메서드 단위							컨트롤러 단위
+		Key, Value를 Model에 저장			Key, Value 전달된 정보를 객체로 생성
+											-> Model 객체에 전달(덮어쓰기)
+		=> 뷰페이지로 전달					=> 뷰페이지로 전달
+	
+	RedirectAttribute
+		addAttribute(); : URI에 표시O / Model, RedirectAttributes 모두 사용 / F5 정보 유지O
+		addFlashAttribute(); : URI에 표시X / RedirectAttributes만 사용 / F5 정보 유지X
